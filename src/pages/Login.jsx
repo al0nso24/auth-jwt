@@ -7,10 +7,12 @@ export default function Login() {
     const navigate = useNavigate()
     const [username, setUsername] = useState('emilys')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
-    const [cargando, setCargando] = useState(false)
+    const [error, setError] = useState('') //por si falla
+    const [cargando, setCargando] = useState(false) //si está enviando la petición
     
+    //Si el usuario está autenticado lo manda a "perfil"
     if (isAuthenticated) return <Navigate to="/perfil" replace />
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError('')
@@ -19,11 +21,12 @@ export default function Login() {
             await login(username, password)
             navigate('/perfil', { replace: true })
         } catch (err) {
-            setError(err.message)
+            setError(err.message) //muestra el mensaje de error
         } finally {
-            setCargando(false)
+            setCargando(false) //termine bien o mal, terminó de cargar
         }
     }
+    
     return (
         <div className="login-page">
             <form className="card" onSubmit={handleSubmit}>

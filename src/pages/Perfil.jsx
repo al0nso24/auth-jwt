@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { getProfile } from '../services/authService'
+
 export default function Perfil() {
-    const { token, logout } = useAuth()
-    const [perfil, setPerfil] = useState(null)
-    const [error, setError] = useState('')
+    const { token, logout } = useAuth() //el jwt actual
+    const [perfil, setPerfil] = useState(null) //guarda información del usuario
+    const [error, setError] = useState('') //mensaje de error
+
     useEffect(() => {
         getProfile(token)
             .then(setPerfil)
             .catch((err) => {
-                if (err.message === 'SESION_EXPIRADA') logout() // token vencido o inválido
+                //Cierra la sesión automáticamente cuando el token vence
+                if (err.message === 'SESION_EXPIRADA') logout()
                 else setError(err.message)
             })
     }, [token, logout])
